@@ -1,14 +1,52 @@
-let buttons = document.querySelectorAll("button");
-let colors = ["red", "yellow", "green"];
+let i = 0;
 
-for (const button of buttons) {
-  button.style.backgroundColor = "white";
-  for (let i = 0; i <= colors.length; i++) {
-    button.addEventListener("click", function () {
-      localStorage.setItem("curColor", colors[i++ % colors.length]);
-      button.style.backgroundColor = localStorage.getItem("curColor");
+let arr = [];
+if(localStorage.getItem("colorIndex") != null){
+  arr = JSON.parse(localStorage.getItem("colorIndex"));
+}
 
-      // console.table(localStorage.getItem("curColor"));
+  
+
+function classClick(e) {
+  let colors = ["white", "red", "yellow", "green"];
+
+  console.log(e);
+
+  let button = e;
+  if (++i == colors.length) i = 0;
+
+  var btn = {
+    id: `${button.id}`,
+    color: `${colors[i]}`,
+  };
+
+  arr = arr.filter(function(jsonObject) {
+    return jsonObject.id != button.id;
+  });
+  arr.push(btn);
+  
+  
+
+
+
+  localStorage.setItem("colorIndex", JSON.stringify(arr));
+
+  
+
+  button.style.backgroundColor = colors[i];
+}
+
+function changeButtonColor() {
+  let savedColors = JSON.parse(localStorage.getItem("colorIndex"))
+  console.log(savedColors)
+
+  if(savedColors) {
+  savedColors.forEach(element => {
+      document.getElementById(element.id).style.backgroundColor = element.color;
     });
   }
 }
+
+
+changeButtonColor();
+
